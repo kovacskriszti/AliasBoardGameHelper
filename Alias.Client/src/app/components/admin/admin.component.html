@@ -1,0 +1,27 @@
+<div *ngIf="connectedPlayers.length>0">
+  Jucători conectați:<button (click)="getConnectedPlayers()">Reîmprospătează</button>
+  <ul>
+    <li *ngFor="let player of connectedPlayers">{{player}}</li>
+  </ul>
+</div>
+
+<div *ngIf="connectedPlayers.length>3">
+  Alege numărul de echipe:
+  <label for="numberOfTeams">Număr de echipe:</label>
+  <input id="numberOfTeams" type="range" min="2" max="{{connectedPlayers.length/2}}" step="1"  name="numberOfTeams" [(ngModel)]="numberOfTeams" />
+  <button (click)="configureManualy()">Alcătuiește echipele</button>
+  <button (click)="configureRandomly()  ">Genrează echipe în mod aleator</button>
+  <div *ngIf="manualConfiguration">
+    <table>
+      <tr><th>Jucător</th><th>Echipă</th></tr>
+      <tr *ngFor="let user of teams">
+        <td>{{user.User}}</td>
+        <td>
+          <button (click)="user.teamDown()" aria-label="Echipa anterioară">-</button>{{user.Team}}
+          <button (click)="user.teamUp()" aria-label="Echipa următoare">+</button>
+        </td>
+      </tr>
+    </table>
+    <button (click)="startGame()">Începe jocul</button>
+  </div>
+</div>

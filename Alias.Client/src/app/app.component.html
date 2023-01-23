@@ -1,0 +1,14 @@
+<h1>Alias</h1>
+<div *ngIf="!connected">
+  <app-login ></app-login>
+</div>
+<div *ngIf="connected&&!started">
+  <app-game-preview></app-game-preview>
+</div>
+<div *ngIf="connected&&started">
+  <app-game></app-game>
+</div>
+
+<div *ngIf="_connectionService.user.admin">
+  <app-admin></app-admin>
+  </div>

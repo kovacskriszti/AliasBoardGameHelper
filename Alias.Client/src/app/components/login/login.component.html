@@ -1,0 +1,10 @@
+<div>
+  <form>
+    <label for="name">Nume:</label>
+    <input [(ngModel)]="name" type="text" id="name" name="name" />
+    <label for="gameId">Cod de acces:</label>
+    <input type="text" id="gameId" [(ngModel)]="gameId" name="gameId" />
+    <button (click)="onSend()">Începe</button>
+    <p *ngIf="errorMessage!=null">{{errorMessage}}</p>
+  </form>
+</div>
