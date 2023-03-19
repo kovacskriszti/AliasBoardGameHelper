@@ -43,6 +43,6 @@ export class ConnectionService {
   }
 
   private getHubUrl(): string {
-    return isDevMode() ? 'http://192.168.1.136:5183/game' : '/game';
+    return isDevMode() ? 'http://localhost:5183/game' : '/game';
   }
 } // class end
