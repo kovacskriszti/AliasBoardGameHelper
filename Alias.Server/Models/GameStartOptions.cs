@@ -2,13 +2,14 @@
 
 public class GameStartOptions
 {
-	public string? Id { get; set; }
-	public bool? Random { get; set; }
-	public UserTeam[]? Teams { get; set; }
+    public string GameId { get; set; } = null!;
+    public bool Random { get; set; }
+    public short NumberOfTeams { get; set; }
+    public List<UserTeam>? Teams { get; set; } = null;
 }
 
 public class UserTeam
 {
-	public string? User { get; set; }
-	public int Team { get; set; }
+    public string User { get; set; } = null!;
+    public int Team { get; set; }
 }

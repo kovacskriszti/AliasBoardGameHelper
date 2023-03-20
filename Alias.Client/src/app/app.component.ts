@@ -10,13 +10,13 @@ import { ConnectionService } from './services/connection.service';
 })
 
 export class AppComponent {
-  connected: boolean = false;
-  started: boolean = false;
-
   constructor(public _connectionService: ConnectionService) {
-    this._connectionService.listen('SuccessConnection', (user: User) => {
-      this.connected = true;
-      this._connectionService.user = user;
+    this._connectionService.listen('SuccessConnection', () => {
+      this._connectionService.connected=true;
+    });
+    this._connectionService.listen('SuccessConnectionAdmin', () => {
+      this._connectionService.connected = true;
+      this._connectionService.user.admin = true;
     });
   }
 }

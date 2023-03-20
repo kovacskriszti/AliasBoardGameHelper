@@ -1,72 +1,59 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Alias.Server.Models;
+using System.Security.Cryptography.X509Certificates;
 using Alias.Server.Services;
 
 namespace Alias.Server.Hubs;
 
 public class GameHub : Hub<IGameHub>
 {
-	private readonly IGameService _gameService;
-	private static HashSet<User> _users { get; set; } = new HashSet<User>();
+    private readonly IGameService _gameService;
+    private readonly IUserService _userService;
 
-	public GameHub(IGameService gameService)
-	{
-		_gameService = gameService;
-	}
+    public GameHub(IGameService gameService, IUserService userService)
+    {
+        _gameService = gameService;
+        _userService = userService;
+    }
 
-	public override async Task OnConnectedAsync()
-	{
-		await base.OnConnectedAsync();
-	}
+    public override async Task OnConnectedAsync()
+    {
+        await base.OnConnectedAsync();
+    }
 
-	public override async Task OnDisconnectedAsync(Exception? exception)
-	{
-		User? user = GetUser(Context.ConnectionId);
-		if(user is null)
-		{
-			return;
-		}
-		if(exception is null)
-		{
-		_gameService.DisconnectUser(user);
-			lock(_users) 
-			{ 
-			_users.Remove(user);
-			}
-		}
-		await base.OnDisconnectedAsync(exception);
-	}
+    public override async Task OnDisconnectedAsync(Exception? exception)
+    {
+        User? user = _userService.RemoveUser(Context.ConnectionId);
+        if(user is null) { return; }
+        _gameService.RemoveUser(user);
+        await base.OnDisconnectedAsync(exception);
+    }
 
-	public async Task Connect(User user)
-	{
-		user.ConnectionId=Context.ConnectionId;
-		if(await _gameService.Connect(user))
-		{
-		lock(_users)
-		{
-			_users.Add(user);
-		}
-		}
-	}
+    public async void Connect(User user)
+    {
+        user.ConnectionId = Context.ConnectionId;
+        if(await _gameService.AddUser(user))
+        {
+            _userService.AddUser(user);
+        }
+    }
 
-	public void Ping()
-	{
-		Clients.Caller.Ping();
-	}
+    public void StartGame(GameStartOptions options)
+    {
+        User? user = _userService.GetUser(Context.ConnectionId);
+        if (user is null) return;
+        _gameService.StartGame(user, options);
+    }
 
-	public void GetConnectedPlayers(User user)
-	{
-		user.ConnectionId = Context.ConnectionId;
-		_gameService.GetConnectedPlayers(user);
-	}
+    public void Ping()
+    {
+        Clients.Caller.Ping();
+    }
 
-	public void StartGame(GameStartOptions options)
-	{
-		_gameService.StartGame(Context.ConnectionId, options);
-	}
-
-	private User? GetUser(string connectionId)
-	{
-		return _users.FirstOrDefault(usr => usr.ConnectionId == Context.ConnectionId);
-	}
+    public void GetConnectedPlayers()
+    {
+        User? user = _userService.GetUser(Context.ConnectionId);
+        if (user is null) { return; }
+        _gameService.GetConnectedUsers(user);
+    }
 } // class end

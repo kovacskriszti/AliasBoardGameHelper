@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { range } from 'rxjs';
 import { GameStartOptions } from '../../models/gameStartOptions';
 import { Team } from '../../models/team';
 import { UserTeam } from '../../models/userTeam';
@@ -14,6 +15,7 @@ export class AdminComponent {
   manualConfiguration = false;
   numberOfTeams = 2;
   teams: UserTeam[] = [];
+  errorMessage: string ='';
 
   constructor(private _connectionService: ConnectionService) {
     this._connectionService.listen('SendConnectedPlayers', (players: string[]) => {
@@ -26,11 +28,15 @@ export class AdminComponent {
       this.connectedPlayers.splice(this.connectedPlayers.indexOf(name), 1);
       this.configureManualy();
     });
-    this.getConnectedPlayers();
+    this._connectionService.listen('GameStartError', (error: string) => {
+      this.displayGameStartError(error);
+    });
+  this.getConnectedPlayers();
   }
 
   getConnectedPlayers() {
     this._connectionService.getConnectedPlayers();
+
   }
 
   configureManualy() {
@@ -47,11 +53,32 @@ export class AdminComponent {
   }
 
   startGame() {
-    let gameStartOptions: GameStartOptions = new GameStartOptions(this._connectionService.user.gameId, true);
+    let gameStartOptions: GameStartOptions = new GameStartOptions(this._connectionService.user.gameId, true, this.numberOfTeams);
     if (this.manualConfiguration == true) {
-      gameStartOptions.random = false;
+      if (!this.validateTeams()) {
+        window.confirm('Trebuie să fie cel puțin doi membri într-o echipă!');
+        return;
+      }
+      gameStartOptions.random= false;
       gameStartOptions.teams = this.teams;
     }
     this._connectionService.startGame(gameStartOptions);
+  }
+
+  private validateTeams(): boolean {
+    let membersInEachTeam: number[] = Array<number>(this.numberOfTeams + 1).fill(0);
+    for (let userTeam of this.teams) {
+      membersInEachTeam[userTeam.Team]++;
+    }
+    for (let i = 1; i < membersInEachTeam.length; i++) {
+      if (membersInEachTeam[i]<2) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  displayGameStartError(error: string) {
+
   }
 } // class end

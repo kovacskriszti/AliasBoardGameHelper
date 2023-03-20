@@ -8,9 +8,4 @@ export class Team {
     this.users = users;
     this.id = users[0].gameId + '/';
   }
-
-  generateId() {
-    let id= '';
-    this.id = id;
-  }
 }

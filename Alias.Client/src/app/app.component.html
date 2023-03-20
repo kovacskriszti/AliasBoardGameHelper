@@ -1,11 +1,11 @@
 <h1>Alias</h1>
-<div *ngIf="!connected">
+<div *ngIf="!_connectionService.connected">
   <app-login ></app-login>
 </div>
-<div *ngIf="connected&&!started">
+<div *ngIf="_connectionService.connected&&!_connectionService.started">
   <app-game-preview></app-game-preview>
 </div>
-<div *ngIf="connected&&started">
+<div *ngIf="_connectionService.connected&&_connectionService.started">
   <app-game></app-game>
 </div>
 

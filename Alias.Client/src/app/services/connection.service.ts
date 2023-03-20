@@ -12,6 +12,8 @@ import { GameStartOptions } from '../models/gameStartOptions';
 export class ConnectionService {
   private connection: signalR.HubConnection;
   user: User = { name: '', gameId: '', admin: false };
+  connected: boolean = false;
+  started: boolean = false;
 
   constructor() {
     this.connection = new signalR.HubConnectionBuilder()
@@ -19,6 +21,9 @@ export class ConnectionService {
       .withAutomaticReconnect()
       .configureLogging(signalR.LogLevel.Error)
       .build();
+    this.connection.onclose((error?: Error) => {
+      this.connected= false;
+    });
     this.listen('TransferAdmin', () => {
       this.user.admin = true;
     });
@@ -31,7 +36,7 @@ export class ConnectionService {
   }
 
   getConnectedPlayers() {
-    this.connection.invoke('GetConnectedPlayers', this.user);
+    this.connection.invoke('GetConnectedPlayers');
   }
 
   startGame(options: GameStartOptions) {
@@ -43,6 +48,10 @@ export class ConnectionService {
   }
 
   private getHubUrl(): string {
-    return isDevMode() ? 'http://192.168.1.136:5183/game' : '/game';
+    return isDevMode() ? 'http://192.168.1.139:5183/game' : '/game';
+  }
+
+  ping() {
+    this.connection.invoke('Ping');
   }
 } // class end
