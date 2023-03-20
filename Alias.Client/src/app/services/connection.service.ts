@@ -48,10 +48,6 @@ export class ConnectionService {
   }
 
   private getHubUrl(): string {
-    return isDevMode() ? 'http://192.168.1.139:5183/game' : '/game';
-  }
-
-  ping() {
-    this.connection.invoke('Ping');
+    return isDevMode() ? 'http://localhost:5183/game' : '/game';
   }
 } // class end
