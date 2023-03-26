@@ -3,6 +3,7 @@ import { timer } from 'rxjs';
 import { TimerHandle } from 'rxjs/internal/scheduler/timerHandle';
 import { User } from '../../models/user';
 import { ConnectionService } from '../../services/connection.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -10,23 +11,18 @@ import { ConnectionService } from '../../services/connection.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  name = '';
-  gameId = '';
+  user: User = {
+    name: '',
+    gameId: '',
+    admin: false
+  }
   errorMessage: string|null = null;
 
-  constructor(private connectionService: ConnectionService) {
-    this.connectionService.listen('UserTaken', () => {
-      this.errorMessage = 'Numele este deja luat.';
-    });
+  constructor(private _userService: UserService) {
   }
 
   onSend() {
     this.errorMessage = null;
-    let user: User = {
-      name: this.name,
-      gameId: this.gameId,
-      admin: false
-    };
-    this.connectionService.connect(user);
+    this._userService.login(this.user);
   }
 }

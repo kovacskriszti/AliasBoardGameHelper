@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alias.Server", "Alias.Server\Alias.Server.csproj", "{262AD3EE-FE74-40E7-ADEF-755A590D7E35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alias.Server", "Alias.Server\Alias.Server.csproj", "{262AD3EE-FE74-40E7-ADEF-755A590D7E35}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Alias.Client", "Alias.Client\", "{233B41EC-E235-49A3-A8C0-A810598F9B61}"
 	ProjectSection(WebsiteProperties) = preProject

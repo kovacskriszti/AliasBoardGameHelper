@@ -8,9 +8,8 @@ public class Game
 {
     public string Id { get; set; } = null!;
     public List<User> Users { get; set; } = new List<User>();
-    public Dictionary<int, List<string>> Words { get; set; } = new Dictionary<int, List<string>>();
     public Team[] Teams { get; set; } = null!;
-    public bool Started = false;
+    private bool Started = false;
     private readonly IHubContext<GameHub, IGameHub> _hubContext;
 
     public Game(IHubContext<GameHub, IGameHub> hubContext, User user)

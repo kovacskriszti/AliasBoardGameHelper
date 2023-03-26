@@ -11,27 +11,22 @@ import { GameStartOptions } from '../models/gameStartOptions';
 })
 export class ConnectionService {
   private connection: signalR.HubConnection;
-  user: User = { name: '', gameId: '', admin: false };
   connected: boolean = false;
-  started: boolean = false;
 
   constructor() {
-    this.connection = new signalR.HubConnectionBuilder()
+      this.connection= new signalR.HubConnectionBuilder()
       .withUrl(this.getHubUrl())
       .withAutomaticReconnect()
       .configureLogging(signalR.LogLevel.Error)
       .build();
+
     this.connection.onclose((error?: Error) => {
-      this.connected= false;
+      throw error;
     });
-    this.listen('TransferAdmin', () => {
-      this.user.admin = true;
-    });
-    this.connection.start();
   }
 
   async connect(user: User) {
-    this.user = user;
+    await this.connection.start();
     await this.connection.invoke('Connect', user);
   }
 

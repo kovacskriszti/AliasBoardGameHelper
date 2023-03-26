@@ -1,9 +1,9 @@
 <div>
   <form>
     <label for="name">Nume:</label>
-    <input [(ngModel)]="name" type="text" id="name" name="name" />
+    <input [(ngModel)]="user.name" type="text" id="name" name="name" />
     <label for="gameId">Cod de acces:</label>
-    <input type="text" id="gameId" [(ngModel)]="gameId" name="gameId" />
+    <input type="text" id="gameId" [(ngModel)]="user.gameId" name="gameId" />
     <button (click)="onSend()">Începe</button>
     <p *ngIf="errorMessage!=null">{{errorMessage}}</p>
   </form>

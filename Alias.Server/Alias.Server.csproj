@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="deploy.ps1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
